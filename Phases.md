@@ -1,8 +1,8 @@
 # Market Oracle v2 - Project Phases Document
 
-> **Optimized execution plan focusing on project deliverables**  
-> Total Duration: **4 Weeks** (~3-4 hrs/day average)  
-> Pre-requisite: Basic Python knowledge
+> **Complete execution plan for SDE + ML internship-ready project**  
+> Total Duration: **30 Days** (~2-3 hrs/day)  
+> Target: SDE & ML Internship Portfolio
 
 ---
 
@@ -33,7 +33,11 @@ flowchart TB
         L --> M["Performance Metrics<br>(Sharpe, CAGR, DD)"]
     end
     
-    M --> N[("Final Report<br>+ GitHub")]
+    subgraph PROD["🚀 Production"]
+        M --> N["MLflow Tracking"]
+        N --> O["pytest + CI/CD"]
+        O --> P["Docker Container"]
+    end
 ```
 
 ---
@@ -42,55 +46,99 @@ flowchart TB
 
 | Phase | Focus | Duration | Key Deliverables |
 |-------|-------|----------|------------------|
-| **Phase 1** | ML Foundations + Classifier | 5 days | Feature pipeline, LR/RF classifier, walk-forward validation |
-| **Phase 2** | Deep Learning + LSTM | 5 days | LSTM model, windowing pipeline, direction prediction |
-| **Phase 3** | NLP + Sentiment + Attention | 5 days | Sentiment integration, attention mechanism, multi-input model |
-| **Phase 4** | Backtesting + Finalization | 5 days | Trading engine, metrics, report, polished GitHub |
+| **Phase 1** | ML Foundations + Classifier | 7 days | Feature pipeline, LR/RF classifier, walk-forward, **tests** |
+| **Phase 2** | Deep Learning + LSTM | 7 days | LSTM model, windowing, direction prediction, **type hints** |
+| **Phase 3** | NLP + Sentiment + Attention | 8 days | Sentiment, attention, multi-input, **ablation studies** |
+| **Phase 4** | Backtesting + Production | 8 days | Trading engine, **MLflow, CI/CD, Docker**, report |
+
+---
+
+## 🎯 Target Ratings
+
+| Role | Before | After 30 Days |
+|------|--------|---------------|
+| SDE Internship | 8/10 | **9.5/10** |
+| ML Internship | 7.5/10 | **9/10** |
 
 ---
 
 # 🟦 PHASE 1: ML Foundations + Classifier
-**Duration:** 5 Days (~3-4 hrs/day)
+**Duration:** 7 Days (~2-3 hrs/day)
 
 ## Goal
-Build a production-ready feature engineering pipeline and train baseline classifiers with proper walk-forward validation.
+Build a production-ready feature engineering pipeline with proper testing and train baseline classifiers.
 
 ## Deliverables Checklist
 
-### Day 1-2: Data Infrastructure
-- [ ] **`data_loader.py`** - Stock data fetching and cleaning
+### Day 1: Project Setup & Data Infrastructure
+- [ ] Initialize project structure:
+  ```
+  Market-Oracle/
+  ├── data/raw/
+  ├── data/processed/
+  ├── models/
+  ├── notebooks/
+  ├── tests/
+  ├── config/
+  └── outputs/
+  ```
+- [ ] Create `requirements.txt` with pinned versions
+- [ ] Create `config/config.yaml` for all parameters
+- [ ] **`data_loader.py`** - Stock data fetching
   - [ ] Download ticker data via yfinance
+  - [ ] Type hints on all functions
+
+### Day 2: Data Cleaning & Log Returns
+- [ ] **`data_loader.py`** continued
   - [ ] Handle missing values (forward-fill, drop)
   - [ ] Compute log returns: `log_return = np.log(close/close.shift(1))`
   - [ ] Save to `/data/raw/{ticker}.csv`
   - [ ] Add date filtering & multi-ticker support
+- [ ] **`tests/test_data_loader.py`** 🧪
+  - [ ] Test NA handling
+  - [ ] Test log return calculation
+  - [ ] Test edge cases (empty data, single row)
 
-### Day 2-3: Feature Engineering
+### Day 3: Technical Indicators
 - [ ] **`indicators.py`** - Technical indicators module
   - [ ] RSI (14-period default)
   - [ ] MACD (12, 26, 9)
   - [ ] SMA 50 & SMA 200 + crossover signal
-  - [ ] Rolling volatility (20-day std of returns)
-  - [ ] Save processed features to `/data/processed/`
+  - [ ] Rolling volatility (20-day std)
+  - [ ] Type hints on all functions
+- [ ] Save processed features to `/data/processed/`
 
-### Day 3-4: Validation Framework
+### Day 4: Indicators Testing & Validation
+- [ ] **`tests/test_indicators.py`** 🧪
+  - [ ] Test RSI bounds (0-100)
+  - [ ] Test SMA calculation manually
+  - [ ] Test edge cases (insufficient data)
+- [ ] Validate indicators match external sources (TradingView)
+
+### Day 5: Walk-Forward Validation
 - [ ] **`walk_forward.py`** - Time-series validation
   - [ ] Implement expanding window splitter
   - [ ] Minimum training window parameter
   - [ ] Step size configuration
   - [ ] Return train/test indices generator
+  - [ ] Type hints
+- [ ] **`tests/test_walk_forward.py`** 🧪
+  - [ ] Test no data leakage
+  - [ ] Test fold sizes correct
 
-### Day 4-5: Phase 1 Models
+### Day 6: Phase 1 Models Training
 - [ ] **`notebooks/01_phase1_classifier.ipynb`**
   - [ ] Train Logistic Regression classifier
   - [ ] Train Random Forest classifier
   - [ ] Generate classification report (precision, recall, F1)
   - [ ] Plot feature importance (RF)
   - [ ] Compare models across walk-forward folds
+  - [ ] **Naive baseline: always predict "up"** 📊
   - [ ] Save best model to `/models/phase1/`
 
-### Day 5: Documentation & Review
+### Day 7: Documentation & Review
 - [ ] Clean all code with docstrings
+- [ ] Run all tests: `pytest tests/ -v`
 - [ ] Update README with Phase 1 section
 - [ ] Push to GitHub with proper commit messages
 
@@ -109,36 +157,36 @@ flowchart LR
     F --> H["Logistic Reg / RF"]
     H --> I["Predictions"]
     I --> J["Metrics<br>(Acc, Prec, Recall)"]
+    J --> K["vs Naive Baseline"]
 ```
 
 ---
 
-## ⏱️ Time Optimization Tips - Phase 1
-
-| Original Approach | Optimized Approach | Time Saved |
-|-------------------|-------------------|------------|
-| Separate pandas refresher day | Learn pandas while coding `data_loader.py` | ~2 hrs |
-| Separate ML theory day | Integrate theory while implementing | ~1 hr |
-| Manual feature implementation | Use `ta` library for indicator validation | ~1 hr |
-
----
-
 # 🟦 PHASE 2: Deep Learning + LSTM
-**Duration:** 5 Days (~3-4 hrs/day)
+**Duration:** 7 Days (~2-3 hrs/day)
 
 ## Goal
-Build an LSTM model for log-return forecasting with proper temporal windowing and walk-forward validation.
+Build an LSTM model with proper type hints, testing, and logging infrastructure.
 
 ## Deliverables Checklist
 
-### Day 6-7: Data Preparation
+### Day 8: Windowing Pipeline
 - [ ] **`windowing.py`** - Time-series windowing utility
   - [ ] `create_windows(data, window_size=30)` function
   - [ ] Output shape: `X: (samples, window, features)`, `y: (samples,)`
-  - [ ] Handle feature scaling (MinMax or Standard)
-  - [ ] Prevent data leakage in scaling
+  - [ ] Type hints with numpy typing
+- [ ] Read window_size from `config/config.yaml`
 
-### Day 7-8: LSTM Architecture
+### Day 9: Windowing Testing & Scaling
+- [ ] **`tests/test_windowing.py`** 🧪
+  - [ ] Test output shapes correct
+  - [ ] Test no data leakage in scaling
+  - [ ] Test edge cases
+- [ ] **`windowing.py`** continued
+  - [ ] Handle feature scaling (MinMax or Standard)
+  - [ ] Prevent data leakage in scaling (fit on train only)
+
+### Day 10: LSTM Architecture
 - [ ] **`models/lstm_model.py`**
   - [ ] Define LSTM architecture:
     ```python
@@ -149,27 +197,38 @@ Build an LSTM model for log-return forecasting with proper temporal windowing an
     ```
   - [ ] Loss: MSE, Optimizer: Adam
   - [ ] Early stopping callback
-  - [ ] Model save/load utilities
+  - [ ] Type hints throughout
 
-### Day 8-9: Training Pipeline
+### Day 11: Model Utilities & Logging
+- [ ] **`models/lstm_model.py`** continued
+  - [ ] Model save/load utilities
+  - [ ] Proper logging (not print statements)
+- [ ] Set up **logging** module in `utils/logger.py`
+  - [ ] File + console handlers
+  - [ ] Configurable log levels
+
+### Day 12: Training Pipeline
 - [ ] **`notebooks/02_lstm_training.ipynb`**
   - [ ] Integrate walk-forward with LSTM
   - [ ] Train across multiple folds
   - [ ] Track metrics per fold:
-    - [ ] RMSE
-    - [ ] MAE  
+    - [ ] RMSE, MAE
     - [ ] Direction accuracy (sign match %)
   - [ ] Save best weights per fold
 
-### Day 9-10: Evaluation & Visualization
+### Day 13: Evaluation & Visualization
 - [ ] **Visualization outputs:**
   - [ ] Predicted vs Actual returns scatter plot
   - [ ] Time-series overlay (pred vs actual)
   - [ ] Loss curves per fold
   - [ ] Direction accuracy comparison bar chart
+  - [ ] **Learning curves** (train vs val loss)
+- [ ] **Compare vs Phase 1 models** (LR, RF)
 
-### Day 10: Documentation & Review
+### Day 14: Documentation & Code Quality
+- [ ] Run `mypy` for type checking
 - [ ] Code cleanup and docstrings
+- [ ] Run all tests: `pytest tests/ -v`
 - [ ] Update README Phase 2 section
 - [ ] Push to GitHub
 
@@ -195,36 +254,32 @@ flowchart TB
 
 ---
 
-## ⏱️ Time Optimization Tips - Phase 2
-
-| Original Approach | Optimized Approach | Time Saved |
-|-------------------|-------------------|------------|
-| Separate TensorFlow basics day | Use pre-built TF tutorials while implementing | ~2 hrs |
-| MNIST toy project first | Skip, directly build stock LSTM | ~3 hrs |
-| Separate windowing day | Combine with LSTM data pipeline | ~1 hr |
-
----
-
 # 🟦 PHASE 3: NLP + Sentiment + Attention
-**Duration:** 5 Days (~3-4 hrs/day)
+**Duration:** 8 Days (~2-3 hrs/day)
 
 ## Goal
-Integrate sentiment analysis from news and implement attention mechanism for improved predictions.
+Integrate sentiment analysis, implement attention mechanism, and conduct proper ablation studies.
 
 ## Deliverables Checklist
 
-### Day 11-12: Sentiment Pipeline
+### Day 15: Sentiment Pipeline Setup
 - [ ] **`sentiment.py`** - News sentiment module
-  - [ ] NewsAPI integration (or free alternative: GDELT/FinViz)
+  - [ ] NewsAPI integration (or GDELT/FinViz)
   - [ ] VADER sentiment scoring
+  - [ ] Type hints
+- [ ] Handle API rate limits gracefully
+
+### Day 16: Sentiment Aggregation
+- [ ] **`sentiment.py`** continued
   - [ ] Daily sentiment aggregation:
     - [ ] Mean compound score
     - [ ] Sentiment volatility
     - [ ] News volume
-  - [ ] Merge with price data (careful: use t for predicting t+1)
+  - [ ] Merge with price data (use t for predicting t+1)
   - [ ] Save to `/data/processed/sentiment/`
+- [ ] **`tests/test_sentiment.py`** 🧪
 
-### Day 12-13: Attention Mechanism
+### Day 17: Attention Mechanism
 - [ ] **`models/attention.py`** - Custom Keras layer
   ```python
   class AttentionLayer(tf.keras.layers.Layer):
@@ -232,33 +287,54 @@ Integrate sentiment analysis from news and implement attention mechanism for imp
       # weights = softmax(score)
       # context = sum(weights * h)
   ```
-- [ ] Visualize attention weights extraction
+- [ ] Attention weights extraction method
+- [ ] Type hints
 
-### Day 13-14: Multi-Input Model
+### Day 18: Multi-Input Model
 - [ ] **`models/attention_lstm.py`**
   - [ ] Dual input architecture:
     - [ ] Price features → LSTM → Attention
     - [ ] Sentiment features → Dense
     - [ ] Concatenate → Output
   - [ ] Functional API implementation
+- [ ] **`tests/test_models.py`** 🧪
 
-### Day 14-15: Training & Comparison
-- [ ] **`notebooks/03_attention_sentiment.ipynb`**
-  - [ ] Train LSTM + Attention + Sentiment model
-  - [ ] Walk-forward validation
-  - [ ] Comparative analysis table:
-    | Model | RMSE | Direction Acc | Notes |
-    |-------|------|---------------|-------|
-    | Logistic Reg | - | - | Phase 1 baseline |
-    | Random Forest | - | - | Phase 1 |
-    | LSTM | - | - | Phase 2 |
-    | LSTM + Attention | - | - | Phase 3 |
-    | LSTM + Attn + Sent | - | - | Phase 3 Full |
+### Day 19: Experiment Tracking Setup
+- [ ] Set up **MLflow** (or Weights & Biases)
+  - [ ] Log all hyperparameters
+  - [ ] Log metrics per fold
+  - [ ] Log model artifacts
+- [ ] Create `mlflow_utils.py` helper
 
-### Day 15: Documentation & Review
+### Day 20: Ablation Studies 📊
+- [ ] **`notebooks/03_ablation_study.ipynb`**
+  - [ ] Ablation study table:
+    | Model Variant | Dir Acc | RMSE | Δ vs Base |
+    |---------------|---------|------|-----------|
+    | Naive (always up) | X% | - | baseline |
+    | Logistic Reg | X% | X | +X% |
+    | Random Forest | X% | X | +X% |
+    | LSTM only | X% | X | +X% |
+    | LSTM + Attention | X% | X | +X% |
+    | LSTM + Sentiment | X% | X | +X% |
+    | Full model | X% | X | +X% |
+  - [ ] Statistical significance (t-test)
+
+### Day 21: Multi-Ticker Validation
+- [ ] Test on 5 diverse tickers:
+  - [ ] AAPL (Tech)
+  - [ ] JPM (Finance)
+  - [ ] XOM (Energy)
+  - [ ] AMZN (Consumer)
+  - [ ] MSFT (Tech)
+- [ ] Create generalization table
+- [ ] Identify failure cases
+
+### Day 22: Phase 3 Documentation
 - [ ] Generate attention heatmaps
 - [ ] Document sentiment impact analysis
 - [ ] Update README Phase 3 section
+- [ ] All tests passing: `pytest tests/ -v`
 - [ ] Push to GitHub
 
 ---
@@ -286,25 +362,15 @@ flowchart TB
 
 ---
 
-## ⏱️ Time Optimization Tips - Phase 3
-
-| Original Approach | Optimized Approach | Time Saved |
-|-------------------|-------------------|------------|
-| Full NLP basics day | Skip tokenization theory, use VADER directly | ~2 hrs |
-| Separate attention theory day | Learn while implementing custom layer | ~1 hr |
-| Build scraper from scratch | Use pre-built NewsAPI SDK | ~1 hr |
-
----
-
-# 🟦 PHASE 4: Backtesting + Finalization
-**Duration:** 5 Days (~3-4 hrs/day + buffer)
+# 🟦 PHASE 4: Backtesting + Production
+**Duration:** 8 Days (~2-3 hrs/day)
 
 ## Goal
-Build trading simulation engine, calculate performance metrics, and finalize professional deliverables.
+Build trading simulation, production infrastructure (CI/CD, Docker), and finalize deliverables.
 
 ## Deliverables Checklist
 
-### Day 16-17: Backtesting Engine
+### Day 23: Backtesting Engine
 - [ ] **`backtester.py`** - Trading simulation
   - [ ] Strategy logic:
     ```python
@@ -313,18 +379,22 @@ Build trading simulation engine, calculate performance metrics, and finalize pro
     else:
         position = 0  # CASH
     ```
-  - [ ] Calculate daily returns accounting for:
-    - [ ] Transaction costs (optional)
-    - [ ] Slippage (optional)
+  - [ ] **Transaction costs: 10bps per trade** (mandatory)
   - [ ] Equity curve generation
+  - [ ] Type hints
+
+### Day 24: Performance Metrics
+- [ ] **`backtester.py`** continued
   - [ ] Performance metrics:
     - [ ] CAGR
     - [ ] Sharpe Ratio
     - [ ] Max Drawdown
     - [ ] Win Rate
     - [ ] Profit Factor
+- [ ] **`tests/test_backtester.py`** 🧪
+- [ ] Compare vs buy-and-hold baseline
 
-### Day 17-18: Full Pipeline Integration
+### Day 25: Full Pipeline Integration
 - [ ] **`main.py`** - End-to-end pipeline
   ```python
   # 1. Load raw data
@@ -335,44 +405,83 @@ Build trading simulation engine, calculate performance metrics, and finalize pro
   # 6. Backtest strategy
   # 7. Generate report
   ```
-- [ ] CLI arguments for ticker, dates, model selection
+- [ ] CLI with argparse/click
 - [ ] Config file support (YAML)
 
-### Day 18-19: Visualization Suite
+### Day 26: CI/CD Pipeline
+- [ ] **`.github/workflows/ci.yml`**
+  ```yaml
+  on: [push, pull_request]
+  jobs:
+    test:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: Install deps
+          run: pip install -r requirements.txt
+        - name: Run tests
+          run: pytest tests/ -v
+        - name: Type check
+          run: mypy src/
+  ```
+- [ ] Add pytest-cov for coverage reporting
+- [ ] Add badge to README
+
+### Day 27: Docker Container
+- [ ] **`Dockerfile`**
+  ```dockerfile
+  FROM python:3.10-slim
+  WORKDIR /app
+  COPY requirements.txt .
+  RUN pip install -r requirements.txt
+  COPY . .
+  CMD ["python", "main.py"]
+  ```
+- [ ] **`docker-compose.yml`** (optional)
+- [ ] Test container locally
+- [ ] Add Docker instructions to README
+
+### Day 28: Visualization Suite
 - [ ] **`visualization.py`** - Chart generation
   - [ ] Equity curve vs buy-and-hold
   - [ ] Daily returns distribution
   - [ ] Drawdown chart
-  - [ ] Attention heatmap (top important days)
-  - [ ] Feature importance (RF)
+  - [ ] Attention heatmap
+  - [ ] Feature importance
   - [ ] Model comparison radar chart
+  - [ ] Confusion matrix + ROC curve
 - [ ] Save all plots to `/outputs/figures/`
 
-### Day 19-20: Final Report
-- [ ] **`docs/final_report.md`** (or PDF)
+### Day 29: Final Report
+- [ ] **`docs/final_report.md`**
   1. [ ] Abstract (150 words)
   2. [ ] Problem Statement
   3. [ ] Data Sources & Preprocessing
   4. [ ] Methodology (walk-forward, no leakage)
   5. [ ] Model Architectures (with diagrams)
-  6. [ ] Experimental Results (tables + charts)
-  7. [ ] Backtest Performance
-  8. [ ] Limitations & Assumptions
-  9. [ ] Future Work
-  10. [ ] References
+  6. [ ] **Ablation Study Results**
+  7. [ ] **Statistical Significance**
+  8. [ ] Backtest Performance (with transaction costs)
+  9. [ ] **Multi-Ticker Generalization**
+  10. [ ] Limitations & Assumptions
+  11. [ ] Future Work
+  12. [ ] References
 
-### Day 20: GitHub Polish & Buffer
+### Day 30: GitHub Polish & Final Review
 - [ ] **Professional README** with:
   - [ ] Project banner/logo
   - [ ] Architecture diagram (Mermaid)
   - [ ] Results summary table
+  - [ ] **CI/CD badge** ✅
+  - [ ] **Coverage badge** 📊
   - [ ] Installation: `pip install -r requirements.txt`
+  - [ ] Docker: `docker build -t market-oracle .`
   - [ ] Quick start guide
   - [ ] Directory structure tree
-  - [ ] License
-- [ ] Requirements.txt finalized
-- [ ] `.gitignore` proper setup
-- [ ] Bug fixes from testing
+  - [ ] License (MIT)
+- [ ] **Pre-commit hooks**: black, ruff, mypy
+- [ ] Final bug fixes
+- [ ] All tests green ✅
 
 ---
 
@@ -380,6 +489,10 @@ Build trading simulation engine, calculate performance metrics, and finalize pro
 
 ```
 Market-Oracle/
+├── 📁 .github/
+│   └── workflows/ci.yml        # CI/CD pipeline
+├── 📁 config/
+│   └── config.yaml             # All hyperparameters
 ├── 📁 data/
 │   ├── raw/                    # Downloaded OHLCV data
 │   └── processed/              # Feature-engineered data
@@ -392,12 +505,23 @@ Market-Oracle/
 ├── 📁 notebooks/
 │   ├── 01_phase1_classifier.ipynb
 │   ├── 02_lstm_training.ipynb
-│   └── 03_attention_sentiment.ipynb
+│   └── 03_ablation_study.ipynb
+├── 📁 tests/                   # pytest test suite
+│   ├── test_data_loader.py
+│   ├── test_indicators.py
+│   ├── test_windowing.py
+│   ├── test_walk_forward.py
+│   ├── test_sentiment.py
+│   ├── test_models.py
+│   └── test_backtester.py
 ├── 📁 outputs/
 │   ├── figures/                # Generated charts
 │   └── results/                # Metric CSVs
 ├── 📁 docs/
 │   └── final_report.md
+├── 📁 utils/
+│   ├── logger.py               # Logging config
+│   └── mlflow_utils.py         # Experiment tracking
 ├── 📄 data_loader.py
 ├── 📄 indicators.py
 ├── 📄 sentiment.py
@@ -407,102 +531,138 @@ Market-Oracle/
 ├── 📄 visualization.py
 ├── 📄 main.py
 ├── 📄 requirements.txt
+├── 📄 Dockerfile
+├── 📄 .pre-commit-config.yaml
 └── 📄 README.md
 ```
 
 ---
 
-## ⏱️ Time Optimization Tips - Phase 4
-
-| Original Approach | Optimized Approach | Time Saved |
-|-------------------|-------------------|------------|
-| Write report from scratch | Use report template, fill sections | ~1 hr |
-| Manual README formatting | Use README generators + badge services | ~30 min |
-| Separate viva prep day | Integrate Q&A into documentation | ~2 hrs |
-
----
-
-# 📊 Overall Timeline Visualization
+# 📊 Overall Timeline (30 Days)
 
 ```mermaid
 gantt
-    title Market Oracle - 20 Day Project Timeline
-    dateFormat  X
+    title Market Oracle - 30 Day Project Timeline
+    dateFormat X
     axisFormat Day %d
     
-    section Phase 1
-    Data Infrastructure     :p1a, 1, 2d
-    Feature Engineering     :p1b, after p1a, 2d
-    Walk-Forward + Models   :p1c, after p1b, 1d
+    section Phase 1 (ML + Tests)
+    Project Setup           :p1a, 1, 1d
+    Data Cleaning          :p1b, after p1a, 1d
+    Indicators             :p1c, after p1b, 1d
+    Indicator Tests        :p1d, after p1c, 1d
+    Walk-Forward           :p1e, after p1d, 1d
+    Phase 1 Models         :p1f, after p1e, 1d
+    Phase 1 Docs           :p1g, after p1f, 1d
     
-    section Phase 2
-    Windowing Pipeline      :p2a, after p1c, 2d
-    LSTM Architecture       :p2b, after p2a, 2d
-    Training + Evaluation   :p2c, after p2b, 1d
+    section Phase 2 (LSTM + Types)
+    Windowing              :p2a, after p1g, 1d
+    Windowing Tests        :p2b, after p2a, 1d
+    LSTM Architecture      :p2c, after p2b, 1d
+    Logging Setup          :p2d, after p2c, 1d
+    Training Pipeline      :p2e, after p2d, 1d
+    Evaluation             :p2f, after p2e, 1d
+    Phase 2 Docs           :p2g, after p2f, 1d
     
-    section Phase 3
-    Sentiment Pipeline      :p3a, after p2c, 2d
-    Attention Mechanism     :p3b, after p3a, 2d
-    Multi-Input Training    :p3c, after p3b, 1d
+    section Phase 3 (NLP + Ablations)
+    Sentiment Setup        :p3a, after p2g, 1d
+    Sentiment Aggregation  :p3b, after p3a, 1d
+    Attention Layer        :p3c, after p3b, 1d
+    Multi-Input Model      :p3d, after p3c, 1d
+    MLflow Setup           :p3e, after p3d, 1d
+    Ablation Studies       :p3f, after p3e, 1d
+    Multi-Ticker Test      :p3g, after p3f, 1d
+    Phase 3 Docs           :p3h, after p3g, 1d
     
-    section Phase 4
-    Backtesting Engine      :p4a, after p3c, 2d
-    Pipeline Integration    :p4b, after p4a, 2d
-    Report + GitHub Polish  :p4c, after p4b, 1d
+    section Phase 4 (Production)
+    Backtesting Engine     :p4a, after p3h, 1d
+    Performance Metrics    :p4b, after p4a, 1d
+    Pipeline Integration   :p4c, after p4b, 1d
+    CI/CD Pipeline         :p4d, after p4c, 1d
+    Docker Container       :p4e, after p4d, 1d
+    Visualization Suite    :p4f, after p4e, 1d
+    Final Report           :p4g, after p4f, 1d
+    GitHub Polish          :p4h, after p4g, 1d
 ```
 
 ---
 
-# ✅ Quick Reference: Daily Focus
+# ✅ Daily Focus Quick Reference
 
-| Day | Phase | Focus Area | Key Deliverable |
-|-----|-------|------------|-----------------|
-| 1 | 1 | Data loading | `data_loader.py` |
-| 2 | 1 | Indicators | `indicators.py` |
-| 3 | 1 | Validation | `walk_forward.py` |
-| 4 | 1 | Classifiers | Notebook 01 |
-| 5 | 1 | Documentation | GitHub push |
-| 6 | 2 | Windowing | `windowing.py` |
-| 7 | 2 | LSTM build | `lstm_model.py` |
-| 8 | 2 | Training | Notebook 02 |
-| 9 | 2 | Evaluation | Visualizations |
-| 10 | 2 | Documentation | GitHub push |
-| 11 | 3 | News API | `sentiment.py` |
-| 12 | 3 | Sentiment | Vader integration |
-| 13 | 3 | Attention | `attention.py` |
-| 14 | 3 | Full model | Multi-input training |
-| 15 | 3 | Documentation | GitHub push |
-| 16 | 4 | Backtesting | `backtester.py` |
-| 17 | 4 | Pipeline | `main.py` |
-| 18 | 4 | Visualization | Charts |
-| 19 | 4 | Report | `final_report.md` |
-| 20 | 4 | Polish | Final README |
+| Day | Phase | Focus | Key Deliverable | SDE/ML Tag |
+|-----|-------|-------|-----------------|------------|
+| 1 | 1 | Project setup | Structure + config | SDE |
+| 2 | 1 | Data cleaning | `data_loader.py` + tests | SDE |
+| 3 | 1 | Indicators | `indicators.py` | - |
+| 4 | 1 | Testing | `test_indicators.py` | SDE |
+| 5 | 1 | Validation | `walk_forward.py` | ML |
+| 6 | 1 | Models | Notebook 01 + baseline | ML |
+| 7 | 1 | Docs | README + Git push | - |
+| 8 | 2 | Windowing | `windowing.py` | - |
+| 9 | 2 | Testing | `test_windowing.py` | SDE |
+| 10 | 2 | LSTM | `lstm_model.py` | ML |
+| 11 | 2 | Logging | `logger.py` | SDE |
+| 12 | 2 | Training | Notebook 02 | ML |
+| 13 | 2 | Evaluation | Learning curves | ML |
+| 14 | 2 | Quality | mypy + docstrings | SDE |
+| 15 | 3 | Sentiment | `sentiment.py` setup | - |
+| 16 | 3 | Aggregation | Sentiment merge | - |
+| 17 | 3 | Attention | `attention.py` | ML |
+| 18 | 3 | Multi-input | `attention_lstm.py` | ML |
+| 19 | 3 | MLflow | Experiment tracking | ML |
+| 20 | 3 | Ablations | Ablation study | ML |
+| 21 | 3 | Validation | Multi-ticker test | ML |
+| 22 | 3 | Docs | Phase 3 README | - |
+| 23 | 4 | Backtest | `backtester.py` | - |
+| 24 | 4 | Metrics | Performance calcs | - |
+| 25 | 4 | Pipeline | `main.py` + CLI | SDE |
+| 26 | 4 | CI/CD | GitHub Actions | SDE |
+| 27 | 4 | Docker | Container + docs | SDE |
+| 28 | 4 | Viz | Charts suite | - |
+| 29 | 4 | Report | `final_report.md` | - |
+| 30 | 4 | Polish | Final README | SDE |
 
 ---
 
 # 🎯 Success Criteria
 
-By end of project, you should have:
+## SDE-Focused Deliverables ✅
+- [ ] **7+ test files** with pytest
+- [ ] **Type hints** on all functions
+- [ ] **CI/CD pipeline** (GitHub Actions)
+- [ ] **Docker container** working
+- [ ] **Proper logging** (no print statements)
+- [ ] **Config externalized** (YAML)
+- [ ] **Pre-commit hooks** configured
 
-- [ ] ✅ **Working ML pipeline** with 3+ model types
-- [ ] ✅ **Walk-forward validated** results (no look-ahead bias)
-- [ ] ✅ **Sentiment integration** from news sources
-- [ ] ✅ **Custom attention layer** implementation
-- [ ] ✅ **Backtesting engine** with Sharpe, DD, CAGR
-- [ ] ✅ **Professional GitHub repo** with architecture diagrams
-- [ ] ✅ **Research-quality report** with methodology & results
-- [ ] ✅ **Visualization suite** (10+ publication-ready charts)
+## ML-Focused Deliverables ✅
+- [ ] **Walk-forward validation** (no leakage)
+- [ ] **Ablation study** with statistical significance
+- [ ] **Naive baselines** comparison
+- [ ] **MLflow experiment tracking**
+- [ ] **Multi-ticker generalization** test
+- [ ] **Attention visualization** 
+- [ ] **Learning curves** analysis
+
+---
+
+# 🏆 Final Ratings After 30 Days
+
+| Role | Before | After | Key Improvements |
+|------|--------|-------|-----------------|
+| **SDE** | 8/10 | **9.5/10** | Tests, CI/CD, Docker, Types |
+| **ML** | 7.5/10 | **9/10** | Ablations, MLflow, Baselines |
 
 ---
 
 > **💡 Pro Tips:**
 > - Commit after every deliverable (not just end of phase)
-> - Keep a `experiments.md` log for what you tried
-> - Test on 2-3 different tickers for robustness
-> - Save model predictions to CSV for debugging
+> - Tag commits for each SDE/ML feature added
+> - Keep an `experiments.md` log for what you tried
+> - Take screenshots of MLflow dashboard for report
 
 ---
 
-**Estimated Total Time:** ~70-80 hours over 20 working days  
-**Original Estimate:** ~100 hours over 28 days  
-**Time Saved:** ~20-30 hours by eliminating separate learning days
+**Estimated Total Time:** ~75-90 hours over 30 days  
+**Daily Commitment:** ~2.5-3 hours/day  
+**Weekend Flexibility:** Can double up on weekends if needed

@@ -17,23 +17,23 @@ flowchart TB
     
     subgraph FEATURES["⚙️ Feature Engineering"]
         B --> E["indicators.py"]
-        E --> F["Technical Features\n(RSI, MACD, SMA, Vol)"]
-        D --> G["Sentiment Features\n(VADER Scores)"]
+        E --> F["Technical Features<br>(RSI, MACD, SMA, Vol)"]
+        D --> G["Sentiment Features<br>(VADER Scores)"]
     end
     
     subgraph MODELS["🧠 ML Models"]
-        F --> H["Phase 1:\nLogistic Reg + RF"]
-        F --> I["Phase 2:\nLSTM Model"]
-        F & G --> J["Phase 3:\nLSTM + Attention\n+ Sentiment"]
+        F --> H["Phase 1:<br>Logistic Reg + RF"]
+        F --> I["Phase 2:<br>LSTM Model"]
+        F & G --> J["Phase 3:<br>LSTM + Attention<br>+ Sentiment"]
     end
     
     subgraph EVAL["📈 Evaluation"]
         H & I & J --> K["walk_forward.py"]
         K --> L["backtester.py"]
-        L --> M["Performance Metrics\n(Sharpe, CAGR, DD)"]
+        L --> M["Performance Metrics<br>(Sharpe, CAGR, DD)"]
     end
     
-    M --> N[("Final Report\n+ GitHub")]
+    M --> N[("Final Report<br>+ GitHub")]
 ```
 
 ---
@@ -108,7 +108,7 @@ flowchart LR
     E --> G["Test Fold"]
     F --> H["Logistic Reg / RF"]
     H --> I["Predictions"]
-    I --> J["Metrics\n(Acc, Prec, Recall)"]
+    I --> J["Metrics<br>(Acc, Prec, Recall)"]
 ```
 
 ---
@@ -180,7 +180,7 @@ Build an LSTM model for log-return forecasting with proper temporal windowing an
 ```mermaid
 flowchart TB
     subgraph INPUT["Input Layer"]
-        A["Window (30 days)"] --> B["Features per day:\n- Log Return\n- RSI\n- MACD\n- SMA signals\n- Volatility"]
+        A["Window (30 days)"] --> B["Features per day:<br>Log Return, RSI,<br>MACD, SMA, Volatility"]
     end
     
     subgraph LSTM_BLOCK["LSTM Block"]
@@ -190,7 +190,7 @@ flowchart TB
         E --> F["Dense 1 Linear"]
     end
     
-    F --> G["Predicted\nLog Return (t+1)"]
+    F --> G["Predicted<br>Log Return (t+1)"]
 ```
 
 ---
@@ -268,13 +268,13 @@ Integrate sentiment analysis from news and implement attention mechanism for imp
 ```mermaid
 flowchart TB
     subgraph PRICE_BRANCH["Price Features Branch"]
-        A["30-day Window\n(OHLCV + Indicators)"] --> B["LSTM 64"]
+        A["30-day Window<br>(OHLCV + Indicators)"] --> B["LSTM 64"]
         B --> C["Attention Layer"]
         C --> D["Context Vector"]
     end
     
     subgraph SENTIMENT_BRANCH["Sentiment Branch"]
-        E["Sentiment Features\n(compound, vol, count)"] --> F["Dense 16 ReLU"]
+        E["Sentiment Features<br>(compound, vol, count)"] --> F["Dense 16 ReLU"]
         F --> G["Dense 8 ReLU"]
     end
     

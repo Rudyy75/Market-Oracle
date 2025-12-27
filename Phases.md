@@ -62,7 +62,87 @@ flowchart TB
 
 ---
 
-# 🟦 PHASE 1: ML Foundations + Classifier
+# � Learning Resources by Day
+
+> **How to use:** Before starting each day's work, spend 20-30 minutes watching/reading the linked resources. Then implement what you learned.
+
+## Phase 1 Resources (Days 1-7)
+
+| Day | Topic | Resources (Watch/Read First) |
+|-----|-------|------------------------------|
+| **1** | Project Setup, yfinance | • [yfinance docs](https://pypi.org/project/yfinance/) (5 min read)<br>• [Python Project Structure](https://youtu.be/ia19n_yK4Qs) - ArjanCodes (12 min) |
+| **2** | pandas, pytest basics | • [Corey Schafer - pandas](https://youtu.be/ZyhVh-qRZPA) (1 hr playlist, watch first 3)<br>• [pytest in 5 minutes](https://youtu.be/etosV2IWBF0) - PyTest basics |
+| **3** | Technical Indicators | • [RSI Explained](https://youtu.be/oLXTl_Sw2O0) (8 min)<br>• [MACD Explained](https://youtu.be/eob4wv2v--k) (10 min)<br>• [ta-lib Python docs](https://technical-analysis-library-in-python.readthedocs.io/) |
+| **4** | pytest advanced | • [pytest Full Tutorial](https://youtu.be/YbpKMIUjvK8) - Tech With Tim (45 min) |
+| **5** | Walk-Forward Validation | • [Walk Forward Validation](https://machinelearningmastery.com/backtest-machine-learning-models-time-series-forecasting/) - MLMastery article<br>• [Time Series CV](https://youtu.be/Lwpoy11Ga2g) (15 min) |
+| **6** | Logistic Reg, Random Forest | • [StatQuest - Logistic Regression](https://youtu.be/yIYKR4sgzI8) (9 min)<br>• [StatQuest - Random Forest](https://youtu.be/J4Wdy0Wc_xQ) (10 min)<br>• [scikit-learn docs](https://scikit-learn.org/stable/modules/ensemble.html) |
+| **7** | Documentation | • [Write Good README](https://youtu.be/E6NO0rgFub4) - Traversy (8 min) |
+
+## Phase 2 Resources (Days 8-14)
+
+| Day | Topic | Resources |
+|-----|-------|-----------|
+| **8** | Time Series Windowing | • [Sliding Window for ML](https://machinelearningmastery.com/time-series-forecasting-supervised-learning/) - MLMastery |
+| **9** | Advanced pytest | • [pytest fixtures & mocking](https://youtu.be/YVRx_6nQPBg) - Socratica (20 min) |
+| **10** | LSTM Theory | • [StatQuest - RNN](https://youtu.be/AsNTP8Kwu80) (15 min)<br>• [StatQuest - LSTM](https://youtu.be/YCzL96nL7j0) (13 min) **← Must watch!**<br>• [Colah's LSTM Blog](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) **← Best written guide** |
+| **11** | Python Logging | • [Corey Schafer - Logging](https://youtu.be/-ARI4Cz-awo) (15 min)<br>• [Type Hints](https://youtu.be/QORvB-_mbZ0) - ArjanCodes (15 min) |
+| **12** | TensorFlow/Keras LSTM | • [TensorFlow LSTM Tutorial](https://www.tensorflow.org/tutorials/structured_data/time_series)<br>• [Keras Sequential API](https://youtu.be/WvoLTXIjBYU) - Sentdex (20 min) |
+| **13** | Model Evaluation | • [Learning Curves](https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html) - sklearn docs |
+| **14** | mypy Type Checking | • [mypy Tutorial](https://youtu.be/lle1x1kqIu0) - ArjanCodes (18 min) |
+
+## Phase 3 Resources (Days 15-22)
+
+| Day | Topic | Resources |
+|-----|-------|-----------|
+| **15-16** | Sentiment Analysis | • [VADER Sentiment](https://youtu.be/xvqsFTUsOmc) - NLP (15 min)<br>• [NewsAPI docs](https://newsapi.org/docs)<br>• [NLTK VADER guide](https://www.nltk.org/howto/sentiment.html) |
+| **17** | Attention Mechanism | • [Attention in 10 min](https://youtu.be/fjJOgb-E41w) - Rasa<br>• [Attention Explained](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/) - Jay Alammar blog **← Best visual guide** |
+| **18** | Keras Functional API | • [Keras Functional API](https://youtu.be/EvGS3VAsG4Y) - Sentdex (15 min)<br>• [Multi-Input Models](https://keras.io/guides/functional_api/) - Keras docs |
+| **19** | MLflow | • [MLflow in 15 min](https://youtu.be/x3cxvsUFVZA) - MLflow official<br>• [MLflow Quickstart](https://mlflow.org/docs/latest/quickstart.html) |
+| **20** | Ablation Studies | • [What is Ablation Study?](https://towardsdatascience.com/what-is-ablation-study-in-machine-learning-5f3f4d0c0) - TDS article<br>• [Statistical Significance](https://youtu.be/5koKb5B_YWo) - StatQuest t-test (12 min) |
+| **21** | Generalization | • [Overfitting & Regularization](https://youtu.be/Q81RR3yKn30) - StatQuest (9 min) |
+| **22** | Documentation | • Review resources, consolidate notes |
+
+## Phase 4 Resources (Days 23-30)
+
+| Day | Topic | Resources |
+|-----|-------|-----------|
+| **23-24** | Backtesting | • [Backtesting 101](https://youtu.be/vC7IJXz-s4E) - QuantInsti (30 min)<br>• [Sharpe Ratio](https://youtu.be/kx3b8d-P4YY) (8 min)<br>• [Drawdown Calculation](https://www.investopedia.com/terms/m/maximum-drawdown-mdd.asp) |
+| **25** | CLI (argparse/click) | • [argparse Tutorial](https://youtu.be/cdblJqEUDNo) - Corey Schafer (15 min)<br>• [click library](https://youtu.be/kNke39OZ2k0) (12 min) |
+| **26** | GitHub Actions CI/CD | • [GitHub Actions in 10 min](https://youtu.be/R8_veQiYBjI) - Fireship<br>• [Python CI Tutorial](https://youtu.be/mFFXuXjVgkU) - TechWorld (20 min) |
+| **27** | Docker | • [Docker in 100 Seconds](https://youtu.be/Gjnup-PuquQ) - Fireship<br>• [Docker for Python](https://youtu.be/0TFWtfFY87U) - Patrick Loeber (25 min)<br>• [Dockerfile best practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/) |
+| **28** | Data Visualization | • [Matplotlib Tips](https://youtu.be/UO98lJQ3QGI) - Corey Schafer<br>• [Seaborn Tutorial](https://youtu.be/6GUZXDef2U0) (40 min) |
+| **29** | Technical Writing | • [How to Write Report](https://youtu.be/L7YQGbG8me4) - Academic reports |
+| **30** | Final Polish | • [README Badges](https://shields.io/)<br>• [pre-commit hooks](https://pre-commit.com/) docs |
+
+---
+
+## 🎥 Binge-Watch Playlists (Optional)
+
+If you prefer watching everything upfront, these playlists cover most topics:
+
+| Playlist | Duration | Covers Days |
+|----------|----------|-------------|
+| [StatQuest ML Fundamentals](https://youtube.com/playlist?list=PLblh5JKOoLUICTaGLRoHQDuF_7q2GfuJF) | ~4 hrs | 5, 6, 10, 20 |
+| [Corey Schafer - pandas](https://youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS) | ~2 hrs | 1, 2, 3 |
+| [TensorFlow/Keras Basics](https://youtube.com/playlist?list=PLQVvvaa0QuDfhTox0AjmQ6tvTgMBZBEXN) | ~3 hrs | 10, 12, 18 |
+| [ArjanCodes - Python Best Practices](https://youtube.com/@ArjanCodes) | Watch top videos | 1, 11, 14, 25 |
+
+---
+
+## 📖 Quick Reference Docs (Bookmark These)
+
+| Library | Documentation |
+|---------|---------------|
+| pandas | [pandas.pydata.org](https://pandas.pydata.org/docs/) |
+| scikit-learn | [scikit-learn.org](https://scikit-learn.org/stable/) |
+| TensorFlow/Keras | [tensorflow.org](https://www.tensorflow.org/tutorials) |
+| pytest | [docs.pytest.org](https://docs.pytest.org/) |
+| MLflow | [mlflow.org/docs](https://mlflow.org/docs/latest/index.html) |
+| yfinance | [pypi.org/project/yfinance](https://pypi.org/project/yfinance/) |
+
+---
+
+# �🟦 PHASE 1: ML Foundations + Classifier
 **Duration:** 7 Days (~2-3 hrs/day)
 
 ## Goal

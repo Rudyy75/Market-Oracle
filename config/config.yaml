@@ -1,0 +1,76 @@
+# Market Oracle Configuration
+# All hyperparameters and settings in one place
+
+# Data Settings
+data:
+  tickers:
+    - AAPL
+    - MSFT
+    - JPM
+    - XOM
+    - AMZN
+  start_date: "2015-01-01"
+  end_date: "2024-12-31"
+  train_ratio: 0.8
+
+# Feature Engineering
+indicators:
+  rsi_period: 14
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  sma_short: 50
+  sma_long: 200
+  volatility_window: 20
+
+# Walk-Forward Validation
+walk_forward:
+  min_train_window: 252  # 1 year of trading days
+  step_size: 21          # ~1 month
+  n_splits: 10
+
+# Windowing (LSTM)
+windowing:
+  window_size: 30
+  scale_features: true
+  scaler_type: "minmax"  # or "standard"
+
+# LSTM Model
+lstm:
+  units: 64
+  dropout: 0.2
+  dense_units: 32
+  learning_rate: 0.001
+  epochs: 100
+  batch_size: 32
+  early_stopping_patience: 10
+
+# Attention Model
+attention:
+  use_attention: true
+  attention_units: 32
+
+# Sentiment
+sentiment:
+  use_sentiment: true
+  news_api_key: "YOUR_API_KEY_HERE"  # Get from newsapi.org
+  lookback_days: 3
+
+# Backtesting
+backtest:
+  transaction_cost_bps: 10  # 10 basis points
+  initial_capital: 100000
+  threshold: 0.0  # Buy if predicted_return > threshold
+
+# Paths
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  models: "models"
+  outputs: "outputs"
+
+# Logging
+logging:
+  level: "INFO"
+  log_to_file: true
+  log_file: "outputs/market_oracle.log"

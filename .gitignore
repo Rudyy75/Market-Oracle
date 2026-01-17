@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data (download fresh, don't commit)
+data/raw/
+data/processed/
+
+# Models (too large for git)
+models/**/*.h5
+models/**/*.keras
+models/**/*.pkl
+models/**/*.joblib
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Outputs (regenerate)
+outputs/figures/
+outputs/results/
+*.log
+
+# API Keys (never commit!)
+.env
+*.env
+config/secrets.yaml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# Distribution
+dist/
+build/
+*.egg-info/
